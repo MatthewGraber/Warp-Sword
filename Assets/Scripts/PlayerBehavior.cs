@@ -42,13 +42,9 @@ public class PlayerBehavior : MonoBehaviour
 
         controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetButtonDown("Jump") && isGrounded())
         {
-            controller.Move(Vector3.zero);
-            if (isGrounded())
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            else
-                Debug.Log("Not grounded");
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
         velocity.y += gravity * Time.deltaTime;
