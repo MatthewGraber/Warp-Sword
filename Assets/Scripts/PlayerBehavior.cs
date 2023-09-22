@@ -12,6 +12,9 @@ public class PlayerBehavior : MonoBehaviour
 
     public GameObject sword;
 
+    public LayerMask groundLayer;
+
+
     float speedBoost = 1f;
     Vector3 velocity;
     void Start()
@@ -39,9 +42,13 @@ public class PlayerBehavior : MonoBehaviour
 
         controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && controller.isGrounded)
+        if (Input.GetKeyDown(KeyCode.K))
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            controller.Move(Vector3.zero);
+            if (isGrounded())
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            else
+                Debug.Log("Not grounded");
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -54,5 +61,14 @@ public class PlayerBehavior : MonoBehaviour
         controller.enabled = false; // Disable the controller so we can teleport
         controller.transform.SetPositionAndRotation(location, transform.rotation);
         controller.enabled = true;  // Re-enable it
+    }
+
+
+    private bool isGrounded()
+    {
+        Vector3 capsuleBottom = new Vector3(controller.bounds.center.x, controller.bounds.min.y, controller.bounds.center.z);
+
+        bool grounded = Physics.CheckCapsule(controller.bounds.center, capsuleBottom, 0.11f, groundLayer, QueryTriggerInteraction.Ignore);
+        return grounded;
     }
 }
