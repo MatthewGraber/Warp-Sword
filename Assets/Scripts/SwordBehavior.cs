@@ -17,14 +17,16 @@ public class SwordBehavior : MonoBehaviour
 
     public Vector3 cameraOffset;
 
-    private Animation swingAnimation;
+    private Animator animator;
 
 
     public enum State
     {
         Held,
+        Swinging,
         Throwing,
-        InObject
+        InObject,
+        InEnemy
     }
 
     public State state = State.Held;
@@ -36,7 +38,7 @@ public class SwordBehavior : MonoBehaviour
     void Start()
     {
         playerBehavior = player.GetComponent<PlayerBehavior>();
-        swingAnimation = transform.GetComponent<Animation>();
+        animator = transform.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -48,12 +50,19 @@ public class SwordBehavior : MonoBehaviour
             // transform.SetPositionAndRotation(view.transform.position + cameraOffset, view.transform.rotation);
             if (Input.GetButtonDown("Fire1"))
             {
-                // swingAnimation.Play();
+                animator.SetTrigger("Attack");
+                state = State.Swinging;
             }
             else if (Input.GetKeyDown(KeyCode.E))
             {
+                // Set parent to null so it moves independantly
                 transform.parent = null;
                 state = State.Throwing;
+
+                // Disable the animator so it doesn't mess with the sword
+                animator.enabled = false;     
+                
+                // Rotate the sword to a throwing angle
                 transform.rotation = transform.rotation * Quaternion.Euler(0, 0, 90f);
                 timeoutCount = 0;
             }
@@ -100,13 +109,25 @@ public class SwordBehavior : MonoBehaviour
         transform.parent = weaponHolder.transform;
         state = State.Held;
         transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
+        animator.enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (state == State.Throwing)
         {
-            if (other.name != "Player")
+            if (other.tag == "Enemy")
+            {
+                Debug.Log("HYYYAAAAHH!!");
+                state = State.InEnemy;
+                Vector3 nextPos = transform.position + transform.rotation * Vector3.up * 0.3f;
+                transform.SetPositionAndRotation(nextPos, transform.rotation);
+                transform.parent = other.transform;
+
+                // TODO: Damage enemy
+            }
+
+            else if (other.name != "Player")
             {
                 Debug.Log("AAHHHH");
                 state = State.InObject;
@@ -116,6 +137,12 @@ public class SwordBehavior : MonoBehaviour
             
         }
         
+    }
+
+    IEnumerator SwingCooldown()
+    {
+        yield return new WaitForSeconds(1.0f);
+        state = State.Held;
     }
 
 }
