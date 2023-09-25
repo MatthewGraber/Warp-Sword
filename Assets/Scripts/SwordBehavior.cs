@@ -12,9 +12,12 @@ public class SwordBehavior : MonoBehaviour
 
     public GameObject sword;
     public GameObject player;
+    public GameObject weaponHolder;
     private PlayerBehavior playerBehavior;
 
     public Vector3 cameraOffset;
+
+    private Animation swingAnimation;
 
 
     public enum State
@@ -33,6 +36,7 @@ public class SwordBehavior : MonoBehaviour
     void Start()
     {
         playerBehavior = player.GetComponent<PlayerBehavior>();
+        swingAnimation = transform.GetComponent<Animation>();
     }
 
     // Update is called once per frame
@@ -42,7 +46,11 @@ public class SwordBehavior : MonoBehaviour
         {
             // view.transform.
             // transform.SetPositionAndRotation(view.transform.position + cameraOffset, view.transform.rotation);
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Fire1"))
+            {
+                // swingAnimation.Play();
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
             {
                 transform.parent = null;
                 state = State.Throwing;
@@ -89,9 +97,9 @@ public class SwordBehavior : MonoBehaviour
 
     private void Recall()
     {
-        transform.parent = view.transform;
+        transform.parent = weaponHolder.transform;
         state = State.Held;
-        transform.SetPositionAndRotation(view.transform.position + view.transform.rotation * cameraOffset, view.transform.rotation * Quaternion.Euler(0f, 90f, 0));
+        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
     }
 
     private void OnTriggerEnter(Collider other)
