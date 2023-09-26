@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SwordBehavior : MonoBehaviour
@@ -18,6 +19,10 @@ public class SwordBehavior : MonoBehaviour
     public Vector3 cameraOffset;
 
     private Animator animator;
+
+    public int throwDamage = 2;
+    public int hitDamage = 2;
+    public int executionDamage = 8;
 
 
     public enum State
@@ -52,8 +57,9 @@ public class SwordBehavior : MonoBehaviour
             {
                 animator.SetTrigger("Attack");
                 state = State.Swinging;
+                StartCoroutine(SwingCooldown());
             }
-            else if (Input.GetKeyDown(KeyCode.E))
+            else if (Input.GetButtonDown("Fire2"))
             {
                 // Set parent to null so it moves independantly
                 transform.parent = null;
@@ -70,7 +76,7 @@ public class SwordBehavior : MonoBehaviour
 
         else if (state == State.Throwing)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Fire2"))
             {
                 Recall();
             }
@@ -78,12 +84,26 @@ public class SwordBehavior : MonoBehaviour
 
         else
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Fire2"))
             {
                 Recall();
             }
-            else if (Input.GetKeyDown(KeyCode.Q))
+            
+            // Teleport to a thing
+            else if (Input.GetButtonDown("Fire1"))
             {
+                
+                if (transform.parent != null)
+                {
+                    BasicEnemy enemy = transform.parent.GetComponent<BasicEnemy>();
+                    if (transform.parent.tag == "Enemy")
+                    {
+                        if (!enemy.TakeDamage(executionDamage))
+                        {
+                            Debug.Log("EXECUTED!");
+                        }
+                    }
+                }
                 playerBehavior.Teleport(transform.position);
                 Recall();
             }
@@ -104,7 +124,7 @@ public class SwordBehavior : MonoBehaviour
         }
     }
 
-    private void Recall()
+    public void Recall()
     {
         transform.parent = weaponHolder.transform;
         state = State.Held;
@@ -122,9 +142,23 @@ public class SwordBehavior : MonoBehaviour
                 state = State.InEnemy;
                 Vector3 nextPos = transform.position + transform.rotation * Vector3.up * 0.3f;
                 transform.SetPositionAndRotation(nextPos, transform.rotation);
-                transform.parent = other.transform;
 
-                // TODO: Damage enemy
+                // Damage enemy
+                BasicEnemy enemy = other.GetComponent<BasicEnemy>();
+
+                if (enemy != null)
+                {
+                    
+                    // Takedamage returns true if the enemy has health remaining
+                    if (enemy.TakeDamage(throwDamage))
+                    {
+                        transform.parent = other.transform;
+                    }
+                    else
+                    {
+                        Recall();
+                    }
+                }
             }
 
             else if (other.name != "Player")
@@ -135,6 +169,19 @@ public class SwordBehavior : MonoBehaviour
                 transform.SetPositionAndRotation(nextPos, transform.rotation);
             }
             
+        }
+        else if (state == State.Swinging)
+        {
+            if (other.tag == "Enemy")
+            {
+                Debug.Log("KAPOW!");
+                BasicEnemy enemy = other.GetComponent<BasicEnemy>();
+
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(hitDamage);
+                }
+            }
         }
         
     }

@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBehavior : MonoBehaviour
 {
+    [SerializeField] Slider healthBar;
+    [SerializeField] Slider manaBar;
+
     public CharacterController controller;
     public float baseSpeed = 12f;
     public float gravity = -9.81f;
@@ -14,12 +18,42 @@ public class PlayerBehavior : MonoBehaviour
 
     public LayerMask groundLayer;
 
+    int health;
+    int maxHealth = 20;
+    public int HP { get { return health; }
+        set
+        {
+            health = value;
+            if (health < 0) health = 0;
+
+            if (health > maxHealth ) health = maxHealth;
+
+            healthBar.value = health*1.0f/maxHealth;
+        }
+    }
+
+    int mana;
+    int maxMana = 20;
+    public int MP { get { return mana; }
+        set
+        {
+            mana = value;
+            if (mana < 0) mana = 0;
+
+            if (mana > maxMana) mana = maxMana;
+
+            manaBar.value = mana*1.0f/maxMana;
+        }
+    }
+
+
 
     float speedBoost = 1f;
     Vector3 velocity;
     void Start()
     {
-
+        health = maxHealth; 
+        mana = maxMana;
     }
 
     void Update()
@@ -64,7 +98,8 @@ public class PlayerBehavior : MonoBehaviour
     {
         Vector3 capsuleBottom = new Vector3(controller.bounds.center.x, controller.bounds.min.y, controller.bounds.center.z);
 
-        bool grounded = Physics.CheckCapsule(controller.bounds.center, capsuleBottom, 0.11f, groundLayer, QueryTriggerInteraction.Ignore);
+        bool grounded = Physics.CheckCapsule(controller.bounds.center, capsuleBottom, 0.2f, groundLayer, QueryTriggerInteraction.Ignore);
         return grounded;
     }
+
 }
