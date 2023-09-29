@@ -18,6 +18,10 @@ public class PlayerBehavior : MonoBehaviour
 
     public LayerMask groundLayer;
 
+
+    // Mana costs
+    private int JUMP_COST = 2;
+
     int health;
     int maxHealth = 20;
     public int HP { get { return health; }
@@ -76,9 +80,15 @@ public class PlayerBehavior : MonoBehaviour
 
         controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && isGrounded())
+        if (Input.GetButtonDown("Jump"))
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            if (isGrounded())
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            else if (MP >= JUMP_COST)
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                MP -= JUMP_COST;
+            }
         }
 
         velocity.y += gravity * Time.deltaTime;
