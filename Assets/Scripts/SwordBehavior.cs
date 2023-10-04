@@ -128,7 +128,7 @@ public class SwordBehavior : MonoBehaviour
     {
         transform.parent = weaponHolder.transform;
         state = State.Held;
-        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
+        transform.SetLocalPositionAndRotation(new Vector3(0, .3f, 0), Quaternion.Euler(0, 0, 0));
         animator.enabled = true;
     }
 
