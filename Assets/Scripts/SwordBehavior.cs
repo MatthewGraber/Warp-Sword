@@ -25,6 +25,9 @@ public class SwordBehavior : MonoBehaviour
     public int executionDamage = 8;
 
 
+    private Vector3 objectOffset;
+    private Quaternion objectRotation;
+
     public enum State
     {
         Held,
@@ -82,6 +85,7 @@ public class SwordBehavior : MonoBehaviour
             }
         }
 
+        // In an object or enemy
         else
         {
             if (Input.GetButtonDown("Fire2"))
@@ -106,6 +110,12 @@ public class SwordBehavior : MonoBehaviour
                 }
                 playerBehavior.Teleport(transform.position);
                 Recall();
+            }
+
+            // No commands have been given
+            else if (state == State.InEnemy)
+            {
+                transform.SetLocalPositionAndRotation(objectOffset, objectRotation);
             }
         }
     }
@@ -153,6 +163,8 @@ public class SwordBehavior : MonoBehaviour
                     if (enemy.TakeDamage(throwDamage))
                     {
                         transform.parent = other.transform;
+                        objectOffset = other.transform.localPosition;
+                        objectRotation = other.transform.rotation;
                     }
                     else
                     {
@@ -167,6 +179,11 @@ public class SwordBehavior : MonoBehaviour
                 state = State.InObject;
                 Vector3 nextPos = transform.position + transform.rotation * Vector3.up * 0.3f;
                 transform.SetPositionAndRotation(nextPos, transform.rotation);
+                
+                // Attach the sword to the object it entered
+                transform.parent = other.transform;
+                // objectOffset = other.transform.localPosition;
+                // objectRotation = other.transform.rotation;
             }
             
         }

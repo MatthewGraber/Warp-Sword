@@ -3,8 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum PlayerState
+{
+    active,
+    sailing
+}
+
 public class PlayerBehavior : MonoBehaviour
 {
+
+    public static PlayerBehavior Instance;
+
     [SerializeField] Slider healthBar;
     [SerializeField] Slider manaBar;
 
@@ -17,6 +26,11 @@ public class PlayerBehavior : MonoBehaviour
     public GameObject sword;
 
     public LayerMask groundLayer;
+
+
+    public PlayerState state = PlayerState.active;
+
+    public Interactable currentInteractable;
 
 
     // Mana costs
@@ -54,6 +68,19 @@ public class PlayerBehavior : MonoBehaviour
 
     float speedBoost = 1f;
     Vector3 velocity;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     void Start()
     {
         health = maxHealth; 
@@ -62,38 +89,61 @@ public class PlayerBehavior : MonoBehaviour
 
     void Update()
     {
-        if (controller.isGrounded && velocity.y < 0)
+        if (state == PlayerState.active)
         {
-            velocity.y = -2f;
-        }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        if (Input.GetButton("Fire3"))
-            speedBoost = sprintSpeed;
-        else
-            speedBoost = 1f;
-
-
-        Vector3 move = transform.right * x + transform.forward * z;
-
-        controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (isGrounded())
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            else if (MP >= JUMP_COST)
+            // Falling
+            if (controller.isGrounded && velocity.y < 0)
             {
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                MP -= JUMP_COST;
+                velocity.y = -2f;
+            }
+
+
+            // Get movement inputs
+            float x = Input.GetAxis("Horizontal");
+            float z = Input.GetAxis("Vertical");
+
+            if (Input.GetButton("Fire3"))
+                speedBoost = sprintSpeed;
+            else
+                speedBoost = 1f;
+
+            Vector3 move = transform.right * x + transform.forward * z;
+
+            // Move the player horizontally
+            controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
+
+            // Jump!
+            if (Input.GetButtonDown("Jump"))
+            {
+                if (isGrounded())
+                    velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                else if (MP >= JUMP_COST)
+                {
+                    velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    MP -= JUMP_COST;
+                }
+            }
+            velocity.y += gravity * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
+
+            // Interact
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                if (currentInteractable != null)
+                {
+                    currentInteractable.Interact();
+                }
             }
         }
+        else if (state == PlayerState.sailing) 
+        {
+            float x = Input.GetAxis("Horizontal");
+            float z = Input.GetAxis("Vertical");
 
-        velocity.y += gravity * Time.deltaTime;
-
-        controller.Move(velocity * Time.deltaTime);
+            Vector3 move = transform.right * x + transform.forward * z;
+        }
+        
     }
 
     public void Teleport(Vector3 location)
@@ -110,6 +160,25 @@ public class PlayerBehavior : MonoBehaviour
 
         bool grounded = Physics.CheckCapsule(controller.bounds.center, capsuleBottom, 0.2f, groundLayer, QueryTriggerInteraction.Ignore);
         return grounded;
+    }
+
+
+    public void ChangeState(PlayerState newState)
+    {
+        switch (newState)
+        {
+            case PlayerState.sailing:
+                {
+
+                }
+                break;
+            case PlayerState.active:
+                {
+
+                }
+                break;
+        }
+        state = newState;
     }
 
 }
