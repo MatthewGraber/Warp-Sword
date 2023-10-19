@@ -13,7 +13,7 @@ public class ShipBehavior : MonoBehaviour
     private Vector3 speed;
 
     public float baseSpeed;
-    private float maxSpeed = 20;
+    private float maxSpeed = 50;
 
     public float rotSpeed;
 
@@ -34,37 +34,7 @@ public class ShipBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Get movement inputs
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-
-
-        if (active)
-        {
-            transform.Rotate(0, x*rotSpeed*Time.deltaTime, 0);
-            // _rb.velocity = _rb.velocity.
-            speed = (transform.forward * z) * (Time.deltaTime * baseSpeed);
-            // Debug.Log(speed);
-            
-
-            
-            // mover.transform.position = mover.transform.position + (move * Time.deltaTime * baseSpeed);
-
-            // PlayerBehavior.Instance.transform.position = transform.position + playerOffset;
-            // PlayerBehavior.Instance.transform.rotation = transform.rotation;
-        }
-        else
-        {
-            speed = Vector3.zero;
-        }
-
-        // Apply forces to the ship
-        _rb.velocity = (_rb.velocity + speed);
-        if (_rb.velocity.magnitude > maxSpeed)
-        {
-            _rb.velocity = _rb.velocity.normalized * maxSpeed;
-        }
+        
         
         
 
@@ -74,13 +44,40 @@ public class ShipBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Get movement inputs
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
         if (active)
         {
+            transform.Rotate(0, x * rotSpeed * Time.deltaTime, 0);
+            speed = (transform.forward * z) * (Time.deltaTime * baseSpeed);
+            // Debug.Log(speed);
+
             PlayerBehavior.Instance.transform.SetPositionAndRotation(transform.position + transform.rotation * playerOffset, PlayerBehavior.Instance.transform.rotation);
         }
         else if (boatTrigger.PlayerOnBoat)
         {
+            speed = Vector3.zero;
             PlayerBehavior.Instance.controller.Move(_rb.velocity * Time.deltaTime);
+        }
+
+        else
+        {
+            speed = Vector3.zero;
+        }
+
+        // Apply forces to the ship
+        _rb.velocity = (_rb.velocity + speed);
+        _rb.velocity= _rb.velocity.magnitude*transform.forward;
+
+
+        transform.rotation.Set(0, transform.rotation.y, 0, 0);
+
+        // Normalize the speed of the boat
+        if (_rb.velocity.magnitude > maxSpeed)
+        {
+            _rb.velocity = _rb.velocity.normalized * maxSpeed;
         }
     }
 }

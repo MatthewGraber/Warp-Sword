@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,9 @@ public class PlayerBehavior : MonoBehaviour
     public float jumpHeight = 3f;
     public float sprintSpeed = 5f;
 
+    public float bouyancy = 10f;
+    public float waterLevel = 0;
+    
     public GameObject sword;
 
     public LayerMask groundLayer;
@@ -133,7 +137,32 @@ public class PlayerBehavior : MonoBehaviour
                     MP -= JUMP_COST;
                 }
             }
-            velocity.y += gravity * Time.deltaTime;
+
+            if (transform.position.y < waterLevel)
+            {
+                // velocity.y *= (0.9f - Time.deltaTime);
+                
+                /*if (transform.position.y + 2 < waterLevel)
+                {
+                    // velocity.y += (Mathf.Pow((waterLevel - transform.position.y), 2) + bouyancy) * Time.deltaTime;
+                    //velocity.y = 1;
+                }*/
+
+                // If we're still going down, go up faster
+                if (velocity.y < 0)
+                {
+                    velocity.y += bouyancy * 3 * Time.deltaTime;
+                }
+                else
+                {
+                    velocity.y += bouyancy * Time.deltaTime;
+                }
+
+            }
+            else
+            {
+                velocity.y += gravity * Time.deltaTime;
+            }
             controller.Move(velocity * Time.deltaTime);
 
             
