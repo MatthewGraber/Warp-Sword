@@ -12,17 +12,25 @@ public class BasicEnemy : MonoBehaviour
     public int health;
     public int maxHealth = 10;
 
+    private Rigidbody _rb;
+
+    private float invincibility = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
         healthbar = GetComponent<FloatingHealthBar>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (invincibility > 0)
+        {
+            invincibility -= Time.deltaTime;
+        }
     }
 
     public bool TakeDamage(int damage)
@@ -34,7 +42,14 @@ public class BasicEnemy : MonoBehaviour
             Die();
             return false;
         }
+        invincibility = 0.3f;
         return true;
+    }
+
+
+    public void Knockback(Vector3 force)
+    {
+        _rb.AddForce(force, ForceMode.Impulse);
     }
 
 

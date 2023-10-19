@@ -12,9 +12,8 @@ public class SwordBehavior : MonoBehaviour
     public Camera view;
 
     public GameObject sword;
-    public GameObject player;
     public GameObject weaponHolder;
-    private PlayerBehavior playerBehavior;
+    private PlayerBehavior player;
 
     public Vector3 cameraOffset;
 
@@ -23,6 +22,7 @@ public class SwordBehavior : MonoBehaviour
     public int throwDamage = 2;
     public int hitDamage = 2;
     public int executionDamage = 8;
+    public int knockbackForce;
 
 
     private Vector3 objectOffset;
@@ -45,7 +45,8 @@ public class SwordBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerBehavior = player.GetComponent<PlayerBehavior>();
+        
+        player = PlayerBehavior.Instance;
         animator = transform.GetComponent<Animator>();
     }
 
@@ -108,7 +109,7 @@ public class SwordBehavior : MonoBehaviour
                         }
                     }
                 }
-                playerBehavior.Teleport(transform.position);
+                player.Teleport(transform.position);
                 Recall();
             }
 
@@ -196,6 +197,7 @@ public class SwordBehavior : MonoBehaviour
 
                 if (enemy != null)
                 {
+                    enemy.Knockback(player.gameObject.transform.forward * knockbackForce);
                     enemy.TakeDamage(hitDamage);
                 }
             }
