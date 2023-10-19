@@ -163,8 +163,8 @@ public class SwordBehavior : MonoBehaviour
                     if (enemy.TakeDamage(throwDamage))
                     {
                         transform.parent = other.transform;
-                        objectOffset = other.transform.localPosition;
-                        objectRotation = other.transform.rotation;
+                        objectOffset = transform.localPosition;
+                        objectRotation = transform.rotation;
                     }
                     else
                     {

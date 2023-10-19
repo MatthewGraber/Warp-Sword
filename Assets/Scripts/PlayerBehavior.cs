@@ -17,6 +17,9 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] Slider healthBar;
     [SerializeField] Slider manaBar;
 
+    [SerializeField] Camera mainCam;
+    [SerializeField] Camera shipCam;
+
     public CharacterController controller;
     public float baseSpeed = 12f;
     public float gravity = -9.81f;
@@ -91,6 +94,12 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (state == PlayerState.active)
         {
+            // Camera
+            if (!mainCam.enabled)
+            {
+                mainCam.enabled = true;
+                shipCam.enabled = false;
+            }
 
             // Falling
             if (controller.isGrounded && velocity.y < 0)
@@ -127,24 +136,32 @@ public class PlayerBehavior : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
             controller.Move(velocity * Time.deltaTime);
 
-            // Interact
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                if (currentInteractable != null)
-                {
-                    currentInteractable.Interact();
-                }
-            }
+            
         }
         else if (state == PlayerState.sailing) 
         {
+            if (!shipCam.enabled)
+            {
+                shipCam.enabled = true;
+                mainCam.enabled = false;
+            }
             float x = Input.GetAxis("Horizontal");
             float z = Input.GetAxis("Vertical");
 
             Vector3 move = transform.right * x + transform.forward * z;
         }
-        
+
+        // Interact
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (currentInteractable != null)
+            {
+                currentInteractable.Interact();
+            }
+        }
+
     }
+
 
     public void Teleport(Vector3 location)
     {
@@ -180,5 +197,28 @@ public class PlayerBehavior : MonoBehaviour
         }
         state = newState;
     }
+
+
+    /*public void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("MovingSurface"))
+        {
+            transform.parent = collision.transform;
+            Debug.Log("Hit a ship!");
+        }
+        else
+        {
+            Debug.Log("Collided with something!");
+        }
+    }
+
+
+    public void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("MovingSurface"))
+        {
+            transform.parent = null;
+            Debug.Log("Left the ship!");
+        }
+    }*/
 
 }
