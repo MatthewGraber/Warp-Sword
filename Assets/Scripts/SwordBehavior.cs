@@ -87,7 +87,7 @@ public class SwordBehavior : MonoBehaviour
         }
 
         // In an object or enemy
-        else
+        else if (state == State.InEnemy || state == State.InObject)
         {
             if (Input.GetButtonDown("Fire2"))
             {
@@ -118,6 +118,12 @@ public class SwordBehavior : MonoBehaviour
             {
                 transform.SetLocalPositionAndRotation(objectOffset, objectRotation);
             }
+        }
+
+        // Swinging the sword
+        else if (state == State.Swinging)
+        {
+
         }
     }
 
@@ -166,6 +172,7 @@ public class SwordBehavior : MonoBehaviour
                         transform.parent = other.transform;
                         objectOffset = transform.localPosition;
                         objectRotation = transform.rotation;
+                        enemy.Knockback(transform.up * knockbackForce);
                     }
                     else
                     {
@@ -197,7 +204,7 @@ public class SwordBehavior : MonoBehaviour
 
                 if (enemy != null)
                 {
-                    enemy.Knockback(player.gameObject.transform.forward * knockbackForce);
+                    enemy.Knockback(transform.up * knockbackForce);
                     enemy.TakeDamage(hitDamage);
                 }
             }

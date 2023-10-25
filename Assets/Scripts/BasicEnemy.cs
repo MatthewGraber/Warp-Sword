@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class BasicEnemy : MonoBehaviour
@@ -16,12 +17,17 @@ public class BasicEnemy : MonoBehaviour
 
     private float invincibility = 0f;
 
+    private float idealDistance = 5;
+
+    private NavMeshAgent agent;
+
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
         healthbar = GetComponent<FloatingHealthBar>();
         _rb = GetComponent<Rigidbody>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -33,8 +39,35 @@ public class BasicEnemy : MonoBehaviour
         }
     }
 
+
+    void FixedUpdate()
+    {
+        Vector3 playerPos = PlayerBehavior.Instance.transform.position;
+
+        if (invincibility > 0) { }
+
+        // If the player is far away, move towards them
+        else if ((transform.position - playerPos).magnitude > idealDistance + 1)
+        {
+            agent.SetDestination(playerPos);
+        }
+        else if ((transform.position - playerPos).magnitude < idealDistance - 1)
+        {
+            // If we're too close, set the ideal position to somewhere 1m away from where we currently are, moving away from the player
+            agent.SetDestination(transform.position + (transform.position - playerPos).normalized);
+        }
+        else
+        {
+            agent.SetDestination(transform.position);
+        }
+    }
+
+
     public bool TakeDamage(int damage)
     {
+        // If in invincibility, return immediately
+        if (invincibility > 0) { return true; }
+
         health -= damage;
         healthbar.SetValue(health,maxHealth);
         if (health <= 0)
@@ -49,6 +82,9 @@ public class BasicEnemy : MonoBehaviour
 
     public void Knockback(Vector3 force)
     {
+        // If in invincibility, return immediately
+        if (invincibility > 0) { return; }
+
         _rb.AddForce(force, ForceMode.Impulse);
     }
 
