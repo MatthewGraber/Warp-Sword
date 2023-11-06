@@ -19,6 +19,8 @@ public class ShipBehavior : MonoBehaviour
 
     private OnBoatTrigger boatTrigger;
 
+    public List<GameObject> crew = new List<GameObject>();
+
     // The physics object that is actually used to move the boat around
     // [SerializeField] private GameObject mover;
 

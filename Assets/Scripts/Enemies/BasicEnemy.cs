@@ -22,8 +22,8 @@ public class BasicEnemy : MonoBehaviour
 
     private float invincibility = 0f;
 
-    protected float minDistance = 4;
-    protected float maxDistance = 6;
+    [SerializeField] protected float minDistance = 4;
+    [SerializeField] protected float maxDistance = 6;
 
     protected NavMeshAgent agent;
 
@@ -129,10 +129,18 @@ public class BasicEnemy : MonoBehaviour
         Destroy(gameObject);
     }
 
+    // Get the distance from the player
     public float DistanceFromPlayer()
     {
         Vector3 playerPos = PlayerBehavior.Instance.transform.position;
         return (transform.position - playerPos).magnitude;
+    }
+
+
+    // Returns a normalized vector in the direction of the player
+    public Vector3 DirectionToPlayer()
+    {
+        return (PlayerBehavior.Instance.transform.position - transform.position).normalized;
     }
 
 

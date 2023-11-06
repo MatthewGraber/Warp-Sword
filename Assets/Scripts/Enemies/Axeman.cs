@@ -12,8 +12,6 @@ public class Axeman : BasicEnemy
     void Start()
     {
         base.Start();
-        minDistance = 1;
-        maxDistance = 2.5f;
         axeBehavior = axe.GetComponent<AxeBehavior>();
     }
 
