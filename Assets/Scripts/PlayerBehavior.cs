@@ -43,6 +43,8 @@ public class PlayerBehavior : MonoBehaviour
     // Mana costs
     private int JUMP_COST = 2;
 
+    bool invincible = false;
+
     int health;
     int maxHealth = 20;
     public int HP { get { return health; }
@@ -140,22 +142,19 @@ public class PlayerBehavior : MonoBehaviour
 
             if (transform.position.y < waterLevel)
             {
-                // velocity.y *= (0.9f - Time.deltaTime);
                 
-                /*if (transform.position.y + 2 < waterLevel)
-                {
-                    // velocity.y += (Mathf.Pow((waterLevel - transform.position.y), 2) + bouyancy) * Time.deltaTime;
-                    //velocity.y = 1;
-                }*/
-
-                // If we're still going down, go up faster
+                // Water floating physics
                 if (velocity.y < 0)
                 {
-                    velocity.y += bouyancy * 3 * Time.deltaTime;
+                    velocity.y += bouyancy * 5 * Time.deltaTime;
                 }
-                else
+                else if (velocity.y < bouyancy)
                 {
                     velocity.y += bouyancy * Time.deltaTime;
+                }
+                else if (velocity.y > bouyancy)
+                {
+                    velocity.y = bouyancy;
                 }
 
             }
@@ -225,6 +224,25 @@ public class PlayerBehavior : MonoBehaviour
                 break;
         }
         state = newState;
+    }
+
+
+    public void TakeDamage(int damage)
+    {
+        if (!invincible)
+        {
+            HP -= damage;
+            StartCoroutine(InvicibilityCooldown());
+        }
+    }
+
+
+    // Prevents the player from being hit by the same object multiple times
+    IEnumerator InvicibilityCooldown()
+    {
+        invincible = true;
+        yield return new WaitForSeconds(0.5f);
+        invincible = false;
     }
 
 

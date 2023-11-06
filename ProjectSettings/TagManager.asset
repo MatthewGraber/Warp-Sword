@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Interactable
   - MovingSurface
+  - Object
+  - Trigger
   layers:
   - Default
   - TransparentFX

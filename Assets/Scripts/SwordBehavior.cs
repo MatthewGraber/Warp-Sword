@@ -181,7 +181,7 @@ public class SwordBehavior : MonoBehaviour
                 }
             }
 
-            else if (other.name != "Player")
+            else if (other.tag == "Object")
             {
                 Debug.Log("AAHHHH");
                 state = State.InObject;
@@ -204,7 +204,7 @@ public class SwordBehavior : MonoBehaviour
 
                 if (enemy != null)
                 {
-                    enemy.Knockback(transform.up * knockbackForce);
+                    enemy.Knockback((transform.up + Vector3.up) * knockbackForce);
                     enemy.TakeDamage(hitDamage);
                 }
             }
@@ -214,7 +214,7 @@ public class SwordBehavior : MonoBehaviour
 
     IEnumerator SwingCooldown()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         state = State.Held;
     }
 
