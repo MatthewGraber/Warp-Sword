@@ -55,9 +55,9 @@ public class BasicEnemy : MonoBehaviour
     {
         Vector3 playerPos = PlayerBehavior.Instance.transform.position;
 
-        if (agent.enabled && isGrounded())
+        if (invincibility <= 0 && isGrounded())
         {
-            agent.updatePosition = true;
+            // agent.updatePosition = true;
 
             // Decide whether or not to change the path
             if (invincibility > 0) { }
@@ -77,14 +77,22 @@ public class BasicEnemy : MonoBehaviour
                 agent.SetDestination(transform.position);
                 FaceTarget();
             }
+
+            if (agent.nextPosition != null)
+            {
+                // Update the enemy's velocity
+                if (agent.nextPosition != transform.position)
+                    _rb.velocity = (agent.nextPosition - transform.position + Vector3.down).normalized * agent.speed;
+                else
+                    _rb.velocity -= Vector3.down * 9.81f * Time.deltaTime;
+            }
             
         }
         // If the agent is disabled or we aren't grounded
         else
         {
             // Disabling this will prevent the agent from teleporting
-            agent.updatePosition = false;
-            agent.nextPosition = transform.position;
+            agent.ResetPath();
         }
         
     }
@@ -113,7 +121,7 @@ public class BasicEnemy : MonoBehaviour
         if (invincibility > 0) { return; }
 
         agent.ResetPath();
-        agent.enabled = false;
+        // agent.enabled = false;
         _rb.AddForce(force, ForceMode.Impulse);
         StartCoroutine(StunTimer());
     }

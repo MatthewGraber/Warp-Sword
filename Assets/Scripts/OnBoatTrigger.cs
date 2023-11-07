@@ -21,13 +21,15 @@ public class OnBoatTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerOnBoat = true;
+        if (other.gameObject.tag == "Player")
+            PlayerOnBoat = true;
     }
 
 
     private void OnTriggerExit(Collider other)
     {
-        PlayerOnBoat = false;
+        if (other.gameObject.tag == "Player")
+            PlayerOnBoat = false;
     }
 
 }
