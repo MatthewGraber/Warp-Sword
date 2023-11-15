@@ -5,7 +5,7 @@ using UnityEngine;
 public class AxeBehavior : MonoBehaviour
 {
     private Animator animator;
-    float COOLDOWN_TIME = 1.0f;
+    float COOLDOWN_TIME = 3.0f;
     int damage = 3;
 
     enum State

@@ -13,7 +13,8 @@ public class ShipBehavior : MonoBehaviour
     private Vector3 speed;
 
     public float baseSpeed;
-    private float maxSpeed = 50;
+    private float maxSpeed = 50;    // Maximum speed the boat can reach
+    private float minSpeed = 0.1f;  // If speed is lower than this, set it to 0. This prevents players and enemies from shoving the boat around
 
     public float rotSpeed;
 
@@ -81,5 +82,15 @@ public class ShipBehavior : MonoBehaviour
         {
             _rb.velocity = _rb.velocity.normalized * maxSpeed;
         }
+        else if (!active && _rb.velocity.magnitude < minSpeed)
+        {
+            _rb.velocity = Vector3.zero;
+        }
+    }
+
+    public void ActivatePlayer()
+    {
+        active = true;
+        _rb.isKinematic = false;
     }
 }

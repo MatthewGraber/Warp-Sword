@@ -6,6 +6,7 @@ public class Gunslinger : BasicEnemy
 {
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] GameObject gun;
+    [SerializeField] Animator GunAnimator;
 
     float COOLDOWN_TIME = 2f;
     float cooldown = 0;
@@ -31,7 +32,7 @@ public class Gunslinger : BasicEnemy
         {
             cooldown += Time.fixedDeltaTime;
         }
-        if (DistanceFromPlayer() >= minDistance)
+        if (DistanceFromPlayer() >= minDistance && State == EnemyState.Active)
         {
             if (cooldown >= COOLDOWN_TIME)
             {
@@ -47,8 +48,12 @@ public class Gunslinger : BasicEnemy
         Vector3 direction = new Vector3(transform.forward.x, DirectionToPlayer().y, transform.forward.z);
         direction = direction.normalized;
 
-        GameObject newBullet = Instantiate(bulletPrefab);
+        GameObject newBullet = Instantiate(bulletPrefab, transform.position + transform.rotation * (new Vector3(0, 0, 1)), transform.rotation);
+        // newBullet.transform.SetPositionAndRotation(transform.position + transform.rotation * (new Vector3(0, 1, 1)), transform.rotation);
+        
         newBullet.GetComponent<BulletBehavior>().SetDirection(direction);
+        GunAnimator.SetTrigger("Attack");
+
 
         cooldown = 0;
     }

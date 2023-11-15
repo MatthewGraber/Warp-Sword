@@ -18,6 +18,6 @@ public class FloatingHealthBar : MonoBehaviour
 
     private void Update()
     {
-        slider.transform.rotation = GameManager.Instance.playerCam.transform.rotation;
+        slider.transform.rotation = PlayerBehavior.Instance.mainCam.transform.rotation;
     }
 }

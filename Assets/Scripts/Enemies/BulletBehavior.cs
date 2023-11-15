@@ -9,6 +9,8 @@ public class BulletBehavior : MonoBehaviour
     [SerializeField] int damage;
     Vector3 direction;
 
+    float DespawnCounter = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +21,16 @@ public class BulletBehavior : MonoBehaviour
     void Update()
     {
         transform.SetPositionAndRotation(transform.position + direction*speed*Time.deltaTime, transform.rotation);
+        DespawnCounter += Time.deltaTime;
+        if (DespawnCounter > 5)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Player") { 
+        if (other.gameObject.tag == "Player") { 
             PlayerBehavior.Instance.TakeDamage(damage);
         }
 

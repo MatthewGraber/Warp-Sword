@@ -171,7 +171,7 @@ public class SwordBehavior : MonoBehaviour
                     {
                         transform.parent = other.transform;
                         objectOffset = transform.localPosition;
-                        objectRotation = transform.rotation;
+                        objectRotation = transform.localRotation;
                         enemy.Knockback(transform.up * knockbackForce);
                     }
                     else
