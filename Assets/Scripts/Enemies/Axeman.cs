@@ -25,7 +25,7 @@ public class Axeman : BasicEnemy
     protected void FixedUpdate()
     {
         base.FixedUpdate();
-        if (DistanceFromPlayer() < 3) {
+        if (DistanceFromPlayer() < 3 && State == EnemyState.Active) {
             axeBehavior.Attack();
         }
     }

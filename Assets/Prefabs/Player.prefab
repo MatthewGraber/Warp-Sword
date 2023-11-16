@@ -225,6 +225,8 @@ MonoBehaviour:
   gravity: -15
   jumpHeight: 3
   sprintSpeed: 5
+  bouyancy: 10
+  waterLevel: 0.3
   sword: {fileID: 7980005120763451510}
   groundLayer:
     serializedVersion: 2
@@ -479,17 +481,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3a4d0d8e11c474ca65ca4fa7d64e9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwSpeed: 30
+  throwSpeed: 50
   timeout: 3
   timeoutCount: 0
   view: {fileID: 2315201742082277916}
   sword: {fileID: 7980005120763451510}
-  player: {fileID: 3468689615877704675}
   weaponHolder: {fileID: 7871031745931646889}
   cameraOffset: {x: 0.4, y: -0.4, z: 0.6}
   throwDamage: 2
   hitDamage: 2
   executionDamage: 8
+  knockbackForce: 5
   state: 0
 --- !u!65 &3746910458660581620
 BoxCollider:

@@ -8,12 +8,19 @@ using UnityEngine.UI;
 public class BasicEnemy : MonoBehaviour
 {
 
+    public enum EnemyState
+    {
+        Idle,
+        Patrolling,
+        Active
+    }
+
+    public EnemyState State = EnemyState.Idle;
+
     [SerializeField] private FloatingHealthBar healthbar;
 
     public int health;
     public int maxHealth = 10;
-
-    public bool alert;
 
     private Rigidbody _rb;
     private CapsuleCollider collider;
@@ -25,10 +32,18 @@ public class BasicEnemy : MonoBehaviour
     [SerializeField] protected float minDistance = 4;
     [SerializeField] protected float maxDistance = 6;
 
-    protected NavMeshAgent agent;
+    public NavMeshAgent agent;
 
     // Time the enemy will be stunned after being hit by an attack
     protected float stunTime = 0.8f;
+
+    // Limits the amount of time we spend going to one patrol destination
+    // Prevents the enemy from getting stuck in one spot
+    protected float PATROL_TIME = 10f;
+    protected float patrolCountdown = 0f;
+
+
+    // EnemyManager manager;
 
     // Start is called before the first frame update
     protected void Start()
@@ -48,39 +63,37 @@ public class BasicEnemy : MonoBehaviour
         {
             invincibility -= Time.deltaTime;
         }
+
+        if (State == EnemyState.Patrolling)
+        {
+            patrolCountdown += Time.deltaTime;
+            if (patrolCountdown > PATROL_TIME)
+            {
+
+            }
+        }
+        
     }
 
 
     protected void FixedUpdate()
     {
-        Vector3 playerPos = PlayerBehavior.Instance.transform.position;
 
         if (invincibility <= 0 && isGrounded())
         {
-            // agent.updatePosition = true;
 
             // Decide whether or not to change the path
             if (invincibility > 0) { }
-
-            // If the player is far away, move towards them
-            else if ((transform.position - playerPos).magnitude > maxDistance)
-            {
-                agent.SetDestination(playerPos);
-            }
-            else if ((transform.position - playerPos).magnitude < minDistance)
-            {
-                // If we're too close, set the ideal position to somewhere 1m away from where we currently are, moving away from the player
-                agent.SetDestination(transform.position + (transform.position - playerPos).normalized);
-            }
             else
             {
-                agent.SetDestination(transform.position);
-                FaceTarget();
+                SetNextDestination();
             }
+            
 
             if (agent.nextPosition != null)
             {
-                // Update the enemy's velocity
+
+                // Add a force moving the enemy in the direction of their next position
                 if (agent.nextPosition != transform.position)
                     _rb.velocity = (agent.nextPosition - transform.position + Vector3.down).normalized * agent.speed;
                 else
@@ -88,11 +101,46 @@ public class BasicEnemy : MonoBehaviour
             }
             
         }
-        // If the agent is disabled or we aren't grounded
-        else
+        
+    }
+
+
+    void SetNextDestination()
+    {
+        switch(State)
         {
-            // Disabling this will prevent the agent from teleporting
-            agent.ResetPath();
+            case EnemyState.Patrolling:
+                if (agent.destination == null)
+                {
+                    ResetPatrol(); 
+                }
+                break;
+
+
+            // Active means we're pursuing the player
+            case EnemyState.Active:
+                Vector3 playerPos = PlayerBehavior.Instance.transform.position;
+
+                // If the player is far away, move towards them
+                if ((transform.position - playerPos).magnitude > maxDistance)
+                {
+                    agent.SetDestination(playerPos);
+                }
+                else if ((transform.position - playerPos).magnitude < minDistance)
+                {
+                    // If we're too close, set the ideal position to somewhere 1m away from where we currently are, moving away from the player
+                    agent.SetDestination(transform.position + (transform.position - playerPos).normalized);
+                }
+                else
+                {
+                    agent.SetDestination(transform.position);
+                    FaceTarget();
+                }
+                break;
+
+
+            case EnemyState.Idle:
+                break;
         }
         
     }
@@ -100,6 +148,11 @@ public class BasicEnemy : MonoBehaviour
 
     public bool TakeDamage(int damage)
     {
+        if (State != EnemyState.Active)
+        {
+            State = EnemyState.Active;
+        }
+
         // If in invincibility, return immediately
         if (invincibility > 0) { return true; }
 
@@ -175,6 +228,27 @@ public class BasicEnemy : MonoBehaviour
     {
         yield return new WaitForSeconds(stunTime);
         agent.enabled = true;
+    }
+
+
+    // Resets the patrol time
+    public void ResetPatrol()
+    {
+        patrolCountdown = 0f;
+        State = EnemyState.Idle;
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // If two enemies collide, give them new destinations so they don't keep staring at each other
+        if (collision.gameObject.tag == "Enemy")
+        {
+            if (State == EnemyState.Patrolling)
+            {
+                ResetPatrol();
+            }
+        }
     }
 
 }

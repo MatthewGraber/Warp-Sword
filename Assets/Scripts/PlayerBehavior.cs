@@ -18,7 +18,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] Slider healthBar;
     [SerializeField] Slider manaBar;
 
-    [SerializeField] Camera mainCam;
+    [SerializeField] public Camera mainCam;
     [SerializeField] Camera shipCam;
 
     public CharacterController controller;
