@@ -32,6 +32,8 @@ public class BasicEnemy : MonoBehaviour
     [SerializeField] protected float minDistance = 4;
     [SerializeField] protected float maxDistance = 6;
 
+    [SerializeField] protected int sightDistance = 15;
+
     public NavMeshAgent agent;
 
     // Time the enemy will be stunned after being hit by an attack
@@ -70,6 +72,14 @@ public class BasicEnemy : MonoBehaviour
             if (patrolCountdown > PATROL_TIME)
             {
 
+            }
+        }
+
+        if (State != EnemyState.Active)
+        {
+            if (DistanceFromPlayer() < sightDistance)
+            {
+                State = EnemyState.Active;
             }
         }
         

@@ -561,15 +561,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0f8c34355d8f864daf98ecfd53e4838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  State: 0
   healthbar: {fileID: 0}
   health: 0
   maxHealth: 10
-  alert: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 192
   minDistance: 1
   maxDistance: 2.5
+  agent: {fileID: 0}
   axe: {fileID: 4677846630622575125}
 --- !u!1 &8427230597711574462
 GameObject:

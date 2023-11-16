@@ -30,7 +30,7 @@ public class PlayerBehavior : MonoBehaviour
     public float bouyancy = 10f;
     public float waterLevel = 0;
     
-    public GameObject sword;
+    //public GameObject sword;
 
     public LayerMask groundLayer;
 

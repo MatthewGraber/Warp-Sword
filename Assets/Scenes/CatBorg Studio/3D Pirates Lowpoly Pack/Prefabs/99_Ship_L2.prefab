@@ -491,7 +491,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 0
   playerOffset: {x: 0, y: 12.6, z: -11}
-  baseSpeed: 15
+  baseSpeed: 45
+  maxSpeed: 75
   rotSpeed: 30
   crew: []
 --- !u!65 &8090735342807139938
