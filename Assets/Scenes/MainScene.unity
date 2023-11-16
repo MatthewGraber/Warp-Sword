@@ -704,7 +704,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &1523105220
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -855,7 +855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5698455401756373806, guid: bc956f77213138048b30d54ab626e70a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.26
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 5698455401756373806, guid: bc956f77213138048b30d54ab626e70a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -963,7 +963,7 @@ MonoBehaviour:
   - {fileID: 4311756336185165693, guid: 4eb40618d7c12e04787b1a4c3666c303, type: 3}
   Water: {fileID: 271100265997461555, guid: 928b7ab55e4c640469989d2fad85c7d7, type: 3}
   player: {fileID: 144329999}
-  playerStartPos: {x: 19.13, y: 4.78, z: 177.33}
+  playerStartPos: {x: 19.13, y: 4.78, z: 27.33}
 --- !u!4 &1629038608
 Transform:
   m_ObjectHideFlags: 0
@@ -1314,7 +1314,7 @@ RectTransform:
   m_Father: {fileID: 1905153884}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
