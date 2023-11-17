@@ -14,13 +14,18 @@ public class WorldGenerator : MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] Vector3 playerStartPos;
 
+    // [SerializeField] GameObject Boss;
+    // [SerializeField] Vector3 bossStartPos;
+
 
     // How large the world, including water, will be
-    int WorldSize = 40;
+    [SerializeField] int WorldSize = 40;
 
     // How large of an area islands will spawn in
     // A value of 5 will create a 5x5 grid of islands
-    int islandGridSize = 15;
+    [SerializeField] int islandGridSize = 15;
+    [SerializeField] int emptyChance = 4;
+
     // Space between islands
     int islandSpacing = 300;
 
@@ -68,12 +73,11 @@ public class WorldGenerator : MonoBehaviour
         player.transform.SetPositionAndRotation(islandCoords[rand] + playerStartPos, player.transform.rotation);
         islandCoords.RemoveAt(rand);
 
-        // Spawn the boss location
+        // Set the boss location
         rand = Random.Range(0, islandCoords.Count);
-        Instantiate(BossIsland, islandCoords[rand], transform.rotation);
+        BossIsland.transform.SetPositionAndRotation(islandCoords[rand], BossIsland.transform.rotation);
         islandCoords.RemoveAt(rand);
 
-        int emptyChance = 4;
         foreach (Vector3 loc in islandCoords)
         {
             rand = Random.Range(0, RandomIslands.Count*emptyChance);

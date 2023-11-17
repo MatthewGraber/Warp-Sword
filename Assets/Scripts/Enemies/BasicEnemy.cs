@@ -22,12 +22,12 @@ public class BasicEnemy : MonoBehaviour
     public int health;
     public int maxHealth = 10;
 
-    private Rigidbody _rb;
-    private CapsuleCollider collider;
+    protected Rigidbody _rb;
+    protected CapsuleCollider collider;
     public LayerMask groundLayer;
 
 
-    private float invincibility = 0f;
+    protected float invincibility = 0f;
 
     [SerializeField] protected float minDistance = 4;
     [SerializeField] protected float maxDistance = 6;
@@ -156,8 +156,10 @@ public class BasicEnemy : MonoBehaviour
     }
 
 
-    public bool TakeDamage(int damage)
+    virtual public bool TakeDamage(int damage)
     {
+
+
         if (State != EnemyState.Active)
         {
             State = EnemyState.Active;
@@ -178,19 +180,23 @@ public class BasicEnemy : MonoBehaviour
     }
 
 
-    public void Knockback(Vector3 force)
+    virtual public void Knockback(Vector3 force)
     {
+
         // If in invincibility, return immediately
         if (invincibility > 0) { return; }
 
-        agent.ResetPath();
+        // Agent will be null for Shrek
+        if (agent != null) 
+            agent.ResetPath();
+
         // agent.enabled = false;
         _rb.AddForce(force, ForceMode.Impulse);
         StartCoroutine(StunTimer());
     }
 
 
-    private void Die()
+    virtual protected void Die()
     {
         SwordBehavior sword = GetComponentInChildren<SwordBehavior>();
         if (sword != null)
@@ -234,10 +240,11 @@ public class BasicEnemy : MonoBehaviour
     }
 
 
-    IEnumerator StunTimer()
+    virtual protected IEnumerator StunTimer()
     {
         yield return new WaitForSeconds(stunTime);
-        agent.enabled = true;
+        if (agent != null)
+            agent.enabled = true;
     }
 
 

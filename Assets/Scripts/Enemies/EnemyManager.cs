@@ -74,8 +74,8 @@ public class EnemyManager : MonoBehaviour
         }
         if (locations[next] != enemy.agent.destination)
         {
-            Debug.Log(enemy.agent.SetDestination(locations[next]));
-            Debug.Log("Set destination to: " + locations[next]);
+            // Debug.Log(enemy.agent.SetDestination(locations[next]));
+            // Debug.Log("Set destination to: " + locations[next]);
             enemy.State = BasicEnemy.EnemyState.Patrolling;
         }
         else

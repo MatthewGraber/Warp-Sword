@@ -33,7 +33,7 @@ public class AxeBehavior : MonoBehaviour
     {
         if (state == State.idle)
         {
-            Debug.Log("Axeman attacking!");
+            // Debug.Log("Axeman attacking!");
             animator.SetTrigger("Attack");
             state = State.swinging;
             StartCoroutine(SwingCooldown());
