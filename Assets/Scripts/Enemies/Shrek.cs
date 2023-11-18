@@ -12,6 +12,19 @@ public class Shrek : BasicEnemy
     [SerializeField] GameObject BossCanvas;
     [SerializeField] Slider healthBar;
 
+    // Scythe
+    [SerializeField] GameObject Scythe;
+    private AxeBehavior scytheBehavior;
+
+
+    // Gun
+    [SerializeField] GameObject bulletPrefab;
+    [SerializeField] GameObject gun;
+    private Animator GunAnimator;
+
+    float COOLDOWN_TIME = 2f;
+    float cooldown = 0;
+
 
     private float speed = 3f;
     private Vector3 direction;
@@ -38,6 +51,10 @@ public class Shrek : BasicEnemy
             collider = GetComponent<CapsuleCollider>();
             _rb = GetComponent<Rigidbody>();
             interferenceCollider = interference.GetComponent<InterferenceCollider>();
+            scytheBehavior = Scythe.GetComponent<AxeBehavior>();
+
+            GunAnimator = gun.GetComponent<Animator>();
+
             Debug.Log("Get Shreked");
         }
 
@@ -58,30 +75,64 @@ public class Shrek : BasicEnemy
 
         if (state == BossState.Active)
         {
+            // EN GARDE
+            FaceTarget();
 
+            // Swish swoosh
+            if (DistanceFromPlayer() <= 4)
+            {
+                scytheBehavior.Attack();
+            }
+
+            // BANG BANG
+            if (cooldown < COOLDOWN_TIME)
+            {
+                cooldown += Time.deltaTime;
+            }
+            if (DistanceFromPlayer() >= 6)
+            {
+                if (cooldown >= COOLDOWN_TIME)
+                {
+                    ShootGun();
+                }
+            }
+        }
+        // BUM BUM BUM BUM BUM BUM BUM BUM
+        else if (state == BossState.Dramatic)
+        {
+            FaceTarget();
         }
     }
 
 
     new void FixedUpdate()
     {
+
+        // transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, 0));
         if (state == BossState.Active) 
         {
-            direction = DirectionToPlayer();
-
-            if (interferenceCollider.avoiding)
+            if (DistanceFromPlayer() > maxDistance)
             {
-                if (direction.y < 0)
+                direction = DirectionToPlayer();
+
+                if (interferenceCollider.avoiding)
                 {
-                    direction.y = 1;
+                    if (direction.y < 0)
+                    {
+                        direction.y = 1;
+                    }
+                    else
+                    {
+                        direction.y += 1;
+                    }
                 }
-                else
-                {
-                    direction.y += 1;
-                }
+                _rb.velocity = direction.normalized * speed;
+            }
+            else
+            {
+                _rb.velocity = Vector3.zero;
             }
 
-            _rb.velocity = direction.normalized*speed;
         }
         else if (state == BossState.Dramatic)
         {
@@ -130,6 +181,23 @@ public class Shrek : BasicEnemy
     {
         yield return new WaitForSeconds(3f);
         state = BossState.Active;
+    }
+
+
+    private void ShootGun()
+    {
+        // Set the direction of firing
+        Vector3 direction = new Vector3(transform.forward.x, DirectionToPlayer().y, transform.forward.z);
+        direction = direction.normalized;
+
+        GameObject newBullet = Instantiate(bulletPrefab, transform.position + transform.rotation * (new Vector3(0, 0, -1)), transform.rotation);
+        // newBullet.transform.SetPositionAndRotation(transform.position + transform.rotation * (new Vector3(0, 1, 1)), transform.rotation);
+
+        newBullet.GetComponent<BulletBehavior>().SetDirection(direction);
+        GunAnimator.SetTrigger("Attack");
+
+
+        cooldown = 0;
     }
 
 }

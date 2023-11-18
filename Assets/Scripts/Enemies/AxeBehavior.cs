@@ -5,8 +5,8 @@ using UnityEngine;
 public class AxeBehavior : MonoBehaviour
 {
     private Animator animator;
-    float COOLDOWN_TIME = 3.0f;
-    int damage = 3;
+    [SerializeField] float COOLDOWN_TIME = 3.0f;
+    [SerializeField] int damage = 3;
 
     enum State
     {

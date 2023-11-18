@@ -221,7 +221,7 @@ public class BasicEnemy : MonoBehaviour
     }
 
 
-    void FaceTarget()
+    protected void FaceTarget()
     {
         // var turnTowardNavSteeringTarget = PlayerBehavior.Instance.transform.position;
 

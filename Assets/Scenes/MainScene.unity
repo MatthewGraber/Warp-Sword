@@ -500,6 +500,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1860190437065144727, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: m_Radius
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 3529294982248748505, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538694561761936432, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: gun
+      value: 
+      objectReference: {fileID: 1803722577}
+    - target: {fileID: 3538694561761936432, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: Scythe
+      value: 
+      objectReference: {fileID: 1964478332}
     - target: {fileID: 3538694561761936432, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
       propertyPath: healthBar
       value: 
@@ -508,6 +524,18 @@ PrefabInstance:
       propertyPath: BossCanvas
       value: 
       objectReference: {fileID: 583446096}
+    - target: {fileID: 3538694561761936432, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: maxDistance
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538694561761936432, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: minDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538694561761936432, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 4751235169504707595, guid: ed67658c46d0b494d975d85fc3338338, type: 3}
     - target: {fileID: 4225101357980434545, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -552,10 +580,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss Island
       objectReference: {fileID: 0}
+    - target: {fileID: 9222541947431758778, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      propertyPath: m_Radius
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 873302707538886853, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1964478334}
   m_SourcePrefab: {fileID: 100100000, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
 --- !u!1 &1582775462
 GameObject:
@@ -612,6 +647,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1803722577 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6511288023185542741, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+  m_PrefabInstance: {fileID: 1234182699}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1964478332 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 873302707538886853, guid: e0ef850ab609cde4ebf53552077aec7c, type: 3}
+  m_PrefabInstance: {fileID: 1234182699}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1964478334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964478332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa1cfdc6e7acc5f489daf189b2b51637, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  COOLDOWN_TIME: 3
+  damage: 3
 --- !u!114 &2113491632 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6299637981883756159, guid: b913d0861cef2a24085ae34ed3bb3bd4, type: 3}
