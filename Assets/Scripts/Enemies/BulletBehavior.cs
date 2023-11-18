@@ -32,9 +32,10 @@ public class BulletBehavior : MonoBehaviour
     {
         if (other.gameObject.tag == "Player") { 
             PlayerBehavior.Instance.TakeDamage(damage);
+            Destroy(gameObject);
         }
-
-        Destroy(gameObject);
+        else if (other.gameObject.tag == "Object" || other.gameObject.tag == "MovingSurface")
+            Destroy(gameObject);
     }
 
     public void SetDirection(Vector3 dir)

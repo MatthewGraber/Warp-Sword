@@ -15,4 +15,13 @@ public class BossOuterTrigger : MonoBehaviour
     {
         
     }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            MusicManager.Instance.FadeStarting();
+        }
+    }
 }

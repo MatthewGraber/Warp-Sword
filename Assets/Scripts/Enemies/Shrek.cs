@@ -194,6 +194,7 @@ public class Shrek : BasicEnemy
         // newBullet.transform.SetPositionAndRotation(transform.position + transform.rotation * (new Vector3(0, 1, 1)), transform.rotation);
 
         newBullet.GetComponent<BulletBehavior>().SetDirection(direction);
+        Debug.Log("Firing bullet at " + newBullet.transform.position);
         GunAnimator.SetTrigger("Attack");
 
 
