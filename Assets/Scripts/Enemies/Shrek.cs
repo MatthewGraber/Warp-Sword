@@ -140,7 +140,7 @@ public class Shrek : BasicEnemy
         }
     }
 
-    override public bool TakeDamage(int damage)
+    override public bool TakeDamage(float damage)
     {
 
         // If in invincibility, return immediately

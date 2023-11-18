@@ -19,8 +19,8 @@ public class BasicEnemy : MonoBehaviour
 
     [SerializeField] private FloatingHealthBar healthbar;
 
-    public int health;
-    public int maxHealth = 10;
+    public float health;
+    public float maxHealth = 10;
 
     protected Rigidbody _rb;
     protected CapsuleCollider collider;
@@ -156,7 +156,7 @@ public class BasicEnemy : MonoBehaviour
     }
 
 
-    virtual public bool TakeDamage(int damage)
+    virtual public bool TakeDamage(float damage)
     {
 
 

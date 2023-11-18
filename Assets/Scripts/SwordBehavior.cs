@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SwordBehavior : MonoBehaviour
 {
+    public static SwordBehavior Instance;
+
     public float throwSpeed = 5.0f;
     public float timeout = 3.0f;
     public float timeoutCount = 0;
@@ -19,9 +21,10 @@ public class SwordBehavior : MonoBehaviour
 
     private Animator animator;
 
-    public int throwDamage = 2;
-    public int hitDamage = 2;
-    public int executionDamage = 8;
+    public float damageMult = 1.0f;
+    public int throwDamage = 3;
+    public int hitDamage = 5;
+    public int executionDamage = 10;
     public int knockbackForce;
 
 
@@ -41,6 +44,18 @@ public class SwordBehavior : MonoBehaviour
 
     private Vector3 tragectory;
 
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -103,7 +118,7 @@ public class SwordBehavior : MonoBehaviour
                     BasicEnemy enemy = transform.parent.GetComponent<BasicEnemy>();
                     if (transform.parent.tag == "Enemy")
                     {
-                        if (!enemy.TakeDamage(executionDamage))
+                        if (!enemy.TakeDamage(executionDamage*damageMult))
                         {
                             Debug.Log("EXECUTED!");
                         }
@@ -167,7 +182,7 @@ public class SwordBehavior : MonoBehaviour
                 {
                     
                     // Takedamage returns true if the enemy has health remaining
-                    if (enemy.TakeDamage(throwDamage))
+                    if (enemy.TakeDamage(throwDamage * damageMult))
                     {
                         transform.parent = other.transform;
                         objectOffset = transform.localPosition;
@@ -201,11 +216,12 @@ public class SwordBehavior : MonoBehaviour
             {
                 Debug.Log("KAPOW!");
                 BasicEnemy enemy = other.GetComponent<BasicEnemy>();
+                PlayerBehavior.Instance.MP += 2*damageMult;
 
                 if (enemy != null)
                 {
                     enemy.Knockback((transform.up + Vector3.up) * knockbackForce);
-                    enemy.TakeDamage(hitDamage);
+                    enemy.TakeDamage(hitDamage * damageMult);
                 }
             }
         }

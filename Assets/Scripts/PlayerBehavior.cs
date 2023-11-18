@@ -22,10 +22,15 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] Camera shipCam;
 
     public CharacterController controller;
-    public float baseSpeed = 12f;
+
+    // Speed variables
+    public float baseSpeed;
+    public float sprintSpeed = 3f;
+    private float slowSpeed = 0.5f;
+    private float speedMult = 1f;
+
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
-    public float sprintSpeed = 5f;
 
     public float bouyancy = 10f;
     public float waterLevel = 0;
@@ -41,13 +46,13 @@ public class PlayerBehavior : MonoBehaviour
 
 
     // Mana costs
-    private int JUMP_COST = 2;
+    private float JUMP_COST = 2;
 
     bool invincible = false;
 
-    int health;
-    int maxHealth = 20;
-    public int HP { get { return health; }
+    float health;
+    public float maxHealth = 10;
+    public float HP { get { return health; }
         set
         {
             health = value;
@@ -59,9 +64,9 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
-    int mana;
-    int maxMana = 20;
-    public int MP { get { return mana; }
+    float mana;
+    public float maxMana = 10;
+    public float MP { get { return mana; }
         set
         {
             mana = value;
@@ -75,7 +80,6 @@ public class PlayerBehavior : MonoBehaviour
 
 
 
-    float speedBoost = 1f;
     Vector3 velocity;
 
     private void Awake()
@@ -98,6 +102,7 @@ public class PlayerBehavior : MonoBehaviour
 
     void Update()
     {
+
         if (state == PlayerState.active)
         {
             // Camera
@@ -118,15 +123,35 @@ public class PlayerBehavior : MonoBehaviour
             float x = Input.GetAxis("Horizontal");
             float z = Input.GetAxis("Vertical");
 
-            if (Input.GetButton("Fire3"))
-                speedBoost = sprintSpeed;
+            if (Input.GetKey(KeyCode.E))
+            {
+                if (MP > 0)
+                {
+                    speedMult = slowSpeed;
+                    HP += Time.deltaTime * 4;
+                    MP -= Time.deltaTime * 8;
+                }
+            }
+            else if (Input.GetButton("Fire3"))
+            {
+                if (MP > 0)
+                {
+                    speedMult = sprintSpeed;
+                    MP -= Time.deltaTime;
+                }
+            }
             else
-                speedBoost = 1f;
+            {
+                speedMult = 1;
+                // Regain mana
+                MP += Time.deltaTime / 2;
+            }
+                
 
             Vector3 move = transform.right * x + transform.forward * z;
 
             // Move the player horizontally
-            controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
+            controller.Move(move * (baseSpeed*speedMult) * Time.deltaTime);
 
             // Jump!
             if (Input.GetButtonDown("Jump"))

@@ -402,7 +402,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c5974a9211fd06449b5fab12cd31a7ac, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -512,7 +512,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f356b600662fd0049b0626949bcff3aa, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -614,8 +614,20 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1374166384021272048, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
+      propertyPath: hitDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1374166384021272048, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
       propertyPath: throwSpeed
       value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1374166384021272048, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
+      propertyPath: throwDamage
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1374166384021272048, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
+      propertyPath: executionDamage
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3468689615877704675, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
       propertyPath: m_Name
@@ -626,9 +638,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2113491632}
     - target: {fileID: 3676468307580826399, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
+      propertyPath: maxMana
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676468307580826399, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1091406997}
+    - target: {fileID: 3676468307580826399, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
+      propertyPath: maxHealth
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3754904596791688616, guid: a282b7ac0efa9404a8c9115177887a29, type: 3}
       propertyPath: m_LocalPosition.y
       value: 15

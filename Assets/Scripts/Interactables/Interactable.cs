@@ -23,14 +23,16 @@ public class Interactable : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        PlayerBehavior.Instance.currentInteractable = this;
+        if (other.tag == "Player")
+            PlayerBehavior.Instance.currentInteractable = this;
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if (PlayerBehavior.Instance.currentInteractable == this) 
-        {
-            PlayerBehavior.Instance.currentInteractable = null;
-        }
+        if (other.tag == "Player")
+            if (PlayerBehavior.Instance.currentInteractable == this) 
+            {
+                PlayerBehavior.Instance.currentInteractable = null;
+            }
     }
 }
