@@ -32,28 +32,34 @@ public class Chest : Interactable
     public override void Interact()
     {
         if (used) return;
+        string message = "You found a ";
 
         switch (type)
         {
             case LootType.SpeedBoost:
                 PlayerBehavior.Instance.baseSpeed += 1;
+                message += "speed boost! + 1 speed";
                 break;
 
             case LootType.DamageBoost:
                 SwordBehavior.Instance.damageMult += 0.2f;
+                message += "damage boost! + 20% damage!";
                 break;
 
             case LootType.ManaBoost:
                 PlayerBehavior.Instance.maxMana += 1;
+                message += "mana boost! + 1 max mana!";
                 break;
 
             case LootType.HealthBoost:
                 PlayerBehavior.Instance.maxHealth += 1;
+                message += "health boost! + 1 max health";
                 break;
 
             default:
                 break;
         }
+        GameManager.Instance.Message(message, 2.0f);
         used = true;
     }
 }
