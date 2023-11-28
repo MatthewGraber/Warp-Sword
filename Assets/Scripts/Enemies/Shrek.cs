@@ -25,8 +25,8 @@ public class Shrek : BasicEnemy
     float COOLDOWN_TIME = 2f;
     float cooldown = 0;
 
-
-    private float speed = 3f;
+    [SerializeField] float dramaticOpeningLength;
+    private float speed = 5f;
     private Vector3 direction;
     [SerializeField] GameObject interference;
     InterferenceCollider interferenceCollider;
@@ -179,7 +179,7 @@ public class Shrek : BasicEnemy
 
     IEnumerator DramaticOpening()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(dramaticOpeningLength);
         state = BossState.Active;
     }
 

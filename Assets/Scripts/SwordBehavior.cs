@@ -68,34 +68,38 @@ public class SwordBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (state == State.Held)
         {
-            // view.transform.
-            // transform.SetPositionAndRotation(view.transform.position + cameraOffset, view.transform.rotation);
-            if (Input.GetButtonDown("Fire1"))
+            if (PlayerBehavior.Instance.state == PlayerState.active)
             {
-                animator.SetTrigger("Attack");
-                state = State.Swinging;
-                StartCoroutine(SwingCooldown());
-            }
-            else if (Input.GetButtonDown("Fire2"))
-            {
-                // Set parent to null so it moves independantly
-                transform.parent = null;
-                state = State.Throwing;
+                // view.transform.
+                // transform.SetPositionAndRotation(view.transform.position + cameraOffset, view.transform.rotation);
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    animator.SetTrigger("Attack");
+                    state = State.Swinging;
+                    StartCoroutine(SwingCooldown());
+                }
+                else if (Input.GetButtonDown("Fire2"))
+                {
+                    // Set parent to null so it moves independantly
+                    transform.parent = null;
+                    state = State.Throwing;
 
-                // Disable the animator so it doesn't mess with the sword
-                animator.enabled = false;     
-                
-                // Rotate the sword to a throwing angle
-                transform.rotation = transform.rotation * Quaternion.Euler(0, 0, 90f);
-                timeoutCount = 0;
+                    // Disable the animator so it doesn't mess with the sword
+                    animator.enabled = false;
+
+                    // Rotate the sword to a throwing angle
+                    transform.rotation = transform.rotation * Quaternion.Euler(0, 0, 90f);
+                    timeoutCount = 0;
+                }
             }
         }
 
         else if (state == State.Throwing)
         {
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && PlayerBehavior.Instance.state == PlayerState.active)
             {
                 Recall();
             }
@@ -104,13 +108,13 @@ public class SwordBehavior : MonoBehaviour
         // In an object or enemy
         else if (state == State.InEnemy || state == State.InObject)
         {
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && PlayerBehavior.Instance.state == PlayerState.active)
             {
                 Recall();
             }
             
             // Teleport to a thing
-            else if (Input.GetButtonDown("Fire1"))
+            else if (Input.GetButtonDown("Fire1") && PlayerBehavior.Instance.state == PlayerState.active)
             {
                 
                 if (transform.parent != null)

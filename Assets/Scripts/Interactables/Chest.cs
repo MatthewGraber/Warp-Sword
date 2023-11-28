@@ -48,11 +48,13 @@ public class Chest : Interactable
 
             case LootType.ManaBoost:
                 PlayerBehavior.Instance.maxMana += 1;
+                PlayerBehavior.Instance.MP += 1;
                 message += "mana boost! + 1 max mana!";
                 break;
 
             case LootType.HealthBoost:
                 PlayerBehavior.Instance.maxHealth += 1;
+                PlayerBehavior.Instance.HP += 1;
                 message += "health boost! + 1 max health";
                 break;
 

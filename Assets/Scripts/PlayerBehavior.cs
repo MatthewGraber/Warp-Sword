@@ -7,16 +7,14 @@ using UnityEngine.UI;
 public enum PlayerState
 {
     active,
-    sailing
+    sailing,
+    dead
 }
 
 public class PlayerBehavior : MonoBehaviour
 {
 
     public static PlayerBehavior Instance;
-
-    [SerializeField] Slider healthBar;
-    [SerializeField] Slider manaBar;
 
     [SerializeField] public Camera mainCam;
     [SerializeField] Camera shipCam;
@@ -55,12 +53,20 @@ public class PlayerBehavior : MonoBehaviour
     public float HP { get { return health; }
         set
         {
-            health = value;
-            if (health < 0) health = 0;
+            if (state != PlayerState.dead)
+            {
+                health = value;
+                if (health < 0)
+                {
+                    health = 0;
+                    state = PlayerState.dead;
+                    GameManager.Instance.PlayerDied();
+                }
 
-            if (health > maxHealth ) health = maxHealth;
+                else if (health > maxHealth) health = maxHealth;
 
-            healthBar.value = health*1.0f/maxHealth;
+                CanvasBehavior.instance.DisplayHealth(health, maxHealth);
+            }
         }
     }
 
@@ -69,12 +75,15 @@ public class PlayerBehavior : MonoBehaviour
     public float MP { get { return mana; }
         set
         {
-            mana = value;
-            if (mana < 0) mana = 0;
+            if (state != PlayerState.dead)
+            {
+                mana = value;
+                if (mana < 0) mana = 0;
 
-            if (mana > maxMana) mana = maxMana;
+                if (mana > maxMana) mana = maxMana;
 
-            manaBar.value = mana*1.0f/maxMana;
+                CanvasBehavior.instance.DisplayMana(mana, maxMana);
+            }
         }
     }
 
@@ -202,6 +211,13 @@ public class PlayerBehavior : MonoBehaviour
             float z = Input.GetAxis("Vertical");
 
             Vector3 move = transform.right * x + transform.forward * z;
+            
+            // Regain mana
+            MP += Time.deltaTime / 2;
+        }
+        else if (state == PlayerState.dead)
+        {
+
         }
 
         // Interact

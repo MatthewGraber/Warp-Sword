@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject messenger;
     public TMP_Text messageBox;
 
+    [SerializeField] Light sun;
+    bool dimingSun;
+
     private void Awake()
     {
         if (Instance == null)
@@ -32,7 +35,32 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (dimingSun)
+        {
+            sun.intensity -= Time.deltaTime/3;
+            if (sun.intensity < 0.2)
+            {
+                sun.intensity = 0.2f;
+                dimingSun = false;
+            }
+        }
+    }
+
+
+    // Called when the player dies
+    public void PlayerDied()
+    {
+        Message("You've met with a terrible fate, haven't you?", 8.0f);
+        MusicManager.Instance.DeathMusic();
+    }
+
+
+    // Called when we're in the endgame
+    public void GameEnd()
+    {
+        Shrek.Instance.Activate();
+        MusicManager.Instance.BossTime();
+        dimingSun = true;
     }
 
 

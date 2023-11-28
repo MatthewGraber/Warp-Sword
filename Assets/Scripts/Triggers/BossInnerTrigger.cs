@@ -22,8 +22,7 @@ public class BossInnerTrigger : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Shrek.Instance.Activate();
-            MusicManager.Instance.BossTime();
+            GameManager.Instance.GameEnd();
         }
     }
 }

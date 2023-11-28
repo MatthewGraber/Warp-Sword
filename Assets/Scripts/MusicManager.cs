@@ -11,6 +11,8 @@ public class MusicManager : MonoBehaviour
     [SerializeField] AudioSource startingMusic;
     [SerializeField] AudioSource bossMusic;
 
+    [SerializeField] AudioClip deathMusic;
+
 
     private bool fadingStarting = false;
     bool bossActive = false;
@@ -25,7 +27,8 @@ public class MusicManager : MonoBehaviour
 
     void Start()
     {
-        
+        bossMusic.volume = 0;
+        bossMusic.Play();
     }
 
     // Update is called once per frame
@@ -56,10 +59,19 @@ public class MusicManager : MonoBehaviour
     public void BossTime()
     {
         if (!bossActive) {
-            bossMusic.Play();
+            bossMusic.time = 0;
+            bossMusic.volume = 1;
             bossActive = true;
         }
         // startingMusic.Stop();
         
+    }
+
+    public void DeathMusic()
+    {
+        bossMusic.volume = 0;
+        startingMusic.clip = deathMusic;
+        startingMusic.volume = 1;
+        startingMusic.Play();
     }
 }

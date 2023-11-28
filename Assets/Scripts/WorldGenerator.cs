@@ -65,17 +65,16 @@ public class WorldGenerator : MonoBehaviour
             }
         }
 
+        // Set the boss location
+        BossIsland.transform.SetPositionAndRotation(islandCoords[islandCoords.Count / 2], BossIsland.transform.rotation);
+        islandCoords.RemoveAt(islandCoords.Count / 2);
+
         // Spawn the start location
         int rand = Random.Range(0, islandCoords.Count);
         Instantiate(StartingIsland, islandCoords[rand], transform.rotation);
 
         // Set the player postion
         player.transform.SetPositionAndRotation(islandCoords[rand] + playerStartPos, player.transform.rotation);
-        islandCoords.RemoveAt(rand);
-
-        // Set the boss location
-        rand = Random.Range(0, islandCoords.Count);
-        BossIsland.transform.SetPositionAndRotation(islandCoords[rand], BossIsland.transform.rotation);
         islandCoords.RemoveAt(rand);
 
         foreach (Vector3 loc in islandCoords)
