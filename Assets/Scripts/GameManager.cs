@@ -4,6 +4,7 @@ using System.Reflection.Emit;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Light sun;
     bool dimingSun;
+
+    public enum GameState
+    {
+        Playing,
+        Ended
+    }
+
+    public GameState state = GameState.Playing;
 
     private void Awake()
     {
@@ -44,12 +53,25 @@ public class GameManager : MonoBehaviour
                 dimingSun = false;
             }
         }
+
+        if (state == GameState.Ended && Input.GetKeyDown(KeyCode.Space))
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
     }
 
 
     // Called when the player dies
     public void PlayerDied()
     {
+        state = GameState.Ended;
         Message("You've met with a terrible fate, haven't you?", 8.0f);
         MusicManager.Instance.DeathMusic();
     }
@@ -67,6 +89,7 @@ public class GameManager : MonoBehaviour
     // Called when the player wins
     public void Victory()
     {
+        state = GameState.Ended;
         MusicManager.Instance.VictoryMusic();
     }
 

@@ -171,6 +171,7 @@ public class PlayerBehavior : MonoBehaviour
                 {
                     velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
                     MP -= JUMP_COST;
+                    TutorialBehavior.Instance.Jump();
                 }
             }
 
@@ -285,28 +286,5 @@ public class PlayerBehavior : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         invincible = false;
     }
-
-
-    /*public void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("MovingSurface"))
-        {
-            transform.parent = collision.transform;
-            Debug.Log("Hit a ship!");
-        }
-        else
-        {
-            Debug.Log("Collided with something!");
-        }
-    }
-
-
-    public void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("MovingSurface"))
-        {
-            transform.parent = null;
-            Debug.Log("Left the ship!");
-        }
-    }*/
 
 }
