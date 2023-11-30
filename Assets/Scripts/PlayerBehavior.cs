@@ -19,6 +19,8 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] public Camera mainCam;
     [SerializeField] Camera shipCam;
 
+    [SerializeField] GameObject hat;
+
     public CharacterController controller;
 
     // Speed variables
@@ -56,7 +58,7 @@ public class PlayerBehavior : MonoBehaviour
             if (state != PlayerState.dead)
             {
                 health = value;
-                if (health < 0)
+                if (health <= 0)
                 {
                     health = 0;
                     state = PlayerState.dead;
@@ -107,6 +109,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         health = maxHealth; 
         mana = maxMana;
+        hat.SetActive(false);
     }
 
     void Update()
@@ -119,6 +122,7 @@ public class PlayerBehavior : MonoBehaviour
             {
                 mainCam.enabled = true;
                 shipCam.enabled = false;
+                hat.SetActive(false);
             }
 
             // Falling
@@ -207,6 +211,7 @@ public class PlayerBehavior : MonoBehaviour
             {
                 shipCam.enabled = true;
                 mainCam.enabled = false;
+                hat.SetActive(true);
             }
             float x = Input.GetAxis("Horizontal");
             float z = Input.GetAxis("Vertical");
