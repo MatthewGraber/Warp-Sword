@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (state == GameState.Ended && Input.GetKeyDown(KeyCode.Space))
+        if (state == GameState.Ended && Input.GetKeyDown(KeyCode.R))
         {
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     public void PlayerDied()
     {
         state = GameState.Ended;
-        Message("You've met with a terrible fate, haven't you?", 8.0f);
+        messageBox.text = "You've met with a terrible fate, haven't you?\nPress 'R' to restart";
         MusicManager.Instance.DeathMusic();
     }
 
