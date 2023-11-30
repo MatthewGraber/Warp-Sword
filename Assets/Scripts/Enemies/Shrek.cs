@@ -166,14 +166,18 @@ public class Shrek : BasicEnemy
             sword.transform.parent = null;
         }
         Destroy(gameObject);
+        GameManager.Instance.Victory();
     }
 
 
     public void Activate()
     {
-        state = BossState.Dramatic;
-        BossCanvas.SetActive(true);
-        StartCoroutine(DramaticOpening());
+        if (state == BossState.Waiting)
+        {
+            state = BossState.Dramatic;
+            BossCanvas.SetActive(true);
+            StartCoroutine(DramaticOpening());
+        }
     }
 
 

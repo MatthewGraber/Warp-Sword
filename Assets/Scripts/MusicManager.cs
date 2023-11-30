@@ -12,6 +12,7 @@ public class MusicManager : MonoBehaviour
     [SerializeField] AudioSource bossMusic;
 
     [SerializeField] AudioClip deathMusic;
+    [SerializeField] AudioClip victoryMusic;
 
 
     private bool fadingStarting = false;
@@ -69,9 +70,18 @@ public class MusicManager : MonoBehaviour
 
     public void DeathMusic()
     {
-        bossMusic.volume = 0;
-        startingMusic.clip = deathMusic;
-        startingMusic.volume = 1;
-        startingMusic.Play();
+        startingMusic.volume = 0;
+        bossMusic.clip = deathMusic;
+        bossMusic.volume = 1;
+        bossMusic.Play();
+    }
+
+
+    public void VictoryMusic()
+    {
+        startingMusic.volume = 0;
+        bossMusic.clip = victoryMusic;
+        bossMusic.volume = 1;
+        bossMusic.Play();
     }
 }

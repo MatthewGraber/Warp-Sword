@@ -64,6 +64,13 @@ public class GameManager : MonoBehaviour
     }
 
 
+    // Called when the player wins
+    public void Victory()
+    {
+        MusicManager.Instance.VictoryMusic();
+    }
+
+
     public void Message(string message, float delay)
     {
         StartCoroutine(ShowMessage(message, delay));

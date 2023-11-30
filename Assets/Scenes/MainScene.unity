@@ -775,6 +775,7 @@ MonoBehaviour:
   startingMusic: {fileID: 555791342}
   bossMusic: {fileID: 555791344}
   deathMusic: {fileID: 8300000, guid: f2d6a0fb3329ea147a29701c9e8f3b23, type: 3}
+  victoryMusic: {fileID: 8300000, guid: 5c62db2c9541fce4cb3190811434b1a5, type: 3}
 --- !u!82 &555791344
 AudioSource:
   m_ObjectHideFlags: 0
