@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     public void PlayerDied()
     {
         state = GameState.Ended;
-        messageBox.text = "You've met with a terrible fate, haven't you?\nPress 'R' to restart";
+        messageBox.text = "You've met with a terrible fate, haven't you?\n\nPress 'R' to restart";
         MusicManager.Instance.DeathMusic();
     }
 
@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
     public void Victory()
     {
         state = GameState.Ended;
+        messageBox.text = "You've defeated Shrek!\n\nPress 'R' to restart";
         MusicManager.Instance.VictoryMusic();
     }
 
